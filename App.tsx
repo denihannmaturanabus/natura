@@ -37,24 +37,26 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="max-w-[428px] mx-auto bg-[#FFF5F7] min-h-screen relative shadow-2xl overflow-hidden">
-      {view === 'home' && (
-        <Home 
-          onSelectPlanilla={navigateToPlanilla} 
-          onGoStats={() => setView('stats')} 
-        />
-      )}
-      
-      {view === 'detail' && selectedPlanillaId && (
-        <PlanillaDetail 
-          planillaId={selectedPlanillaId} 
-          onBack={() => setView('home')} 
-        />
-      )}
+    <div className="max-w-[428px] lg:max-w-full mx-auto bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 min-h-screen relative shadow-2xl lg:shadow-none overflow-hidden">
+      <div className="lg:max-w-7xl lg:mx-auto lg:px-6 lg:py-8">
+        {view === 'home' && (
+          <Home 
+            onSelectPlanilla={navigateToPlanilla} 
+            onGoStats={() => setView('stats')} 
+          />
+        )}
+        
+        {view === 'detail' && selectedPlanillaId && (
+          <PlanillaDetail 
+            planillaId={selectedPlanillaId} 
+            onBack={() => setView('home')} 
+          />
+        )}
 
-      {view === 'stats' && (
-        <Stats onBack={() => setView('home')} />
-      )}
+        {view === 'stats' && (
+          <Stats onBack={() => setView('home')} />
+        )}
+      </div>
     </div>
   );
 };

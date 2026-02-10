@@ -6,12 +6,18 @@ export interface Planilla {
   created_at: string;
 }
 
+export interface Producto {
+  id: string;
+  descripcion: string;
+  monto: number;
+  pagado: boolean;
+}
+
 export interface Pedido {
   id: string;
   planilla_id: string;
   cliente_nombre: string;
-  monto_deuda: number;
-  pagado: boolean;
+  productos: Producto[];
   created_at: string;
 }
 
