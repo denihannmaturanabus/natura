@@ -181,6 +181,44 @@ const PlanillaDetail: React.FC<PlanillaDetailProps> = ({ empresa, planillaId, on
     window.open(`https://wa.me/?text=${message}`, '_blank');
   };
 
+  const generateWhatsAppTicket = (pedido: Pedido, empresa: 'natura' | 'esika') => {
+    if (pedido.productos.length === 0) return;
+    
+    const empresaNombre = empresa === 'natura' ? 'Natura' : 'Ésika';
+    const emoji = empresa === 'natura' ? '🌸' : '💎';
+    
+    // Calcular totales
+    const totalPedido = pedido.productos.reduce((sum, prod) => sum + (prod.monto || 0), 0);
+    const totalPagado = pedido.productos.filter(p => p.pagado).reduce((sum, prod) => sum + (prod.monto || 0), 0);
+    const saldoPendiente = totalPedido - totalPagado;
+    
+    // Construir mensaje
+    let mensaje = `${emoji} *Detalle de tu pedido - ${empresaNombre}* ${emoji}\n`;
+    mensaje += `---------------------------\n\n`;
+    
+    // Lista de productos
+    pedido.productos.forEach(prod => {
+      const estado = prod.pagado ? '✅' : '⏳';
+      const descripcion = prod.descripcion || 'Producto';
+      mensaje += `${estado} ${descripcion} - $${(prod.monto || 0).toLocaleString()}\n`;
+    });
+    
+    mensaje += `\n---------------------------\n`;
+    mensaje += `*Total pedido:* $${totalPedido.toLocaleString()}\n`;
+    mensaje += `*Ya pagado:* $${totalPagado.toLocaleString()}\n`;
+    
+    if (saldoPendiente > 0) {
+      mensaje += `*💰 Saldo Pendiente: $${saldoPendiente.toLocaleString()}* ⏳\n`;
+    } else {
+      mensaje += `✅ *¡Pedido completamente pagado!*\n`;
+    }
+    
+    mensaje += `\n🙏 Gracias por tu compra en ${empresaNombre}! 💖`;
+    
+    const encodedMessage = encodeURIComponent(mensaje);
+    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+  };
+
   return (
     <Layout 
       empresa={empresa}
@@ -335,6 +373,17 @@ const PlanillaDetail: React.FC<PlanillaDetailProps> = ({ empresa, planillaId, on
                 </div>
 
                 <div className="flex flex-col items-center gap-2 flex-shrink-0">
+                  {/* Botón de Ticket Completo */}
+                  {p.productos.length > 0 && (
+                    <button 
+                      onClick={() => generateWhatsAppTicket(p, empresa)}
+                      className="w-9 h-9 sm:w-11 sm:h-11 bg-blue-500 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center active:scale-90 transition-all shadow-md"
+                      title="Enviar ticket detallado"
+                    >
+                      <ShoppingBag size={16} className="sm:w-[18px] sm:h-[18px]" />
+                    </button>
+                  )}
+                  {/* Botón de Recordatorio Rápido */}
                   {totalPendiente > 0 && (
                     <button 
                       onClick={() => handleWhatsApp(p)}
