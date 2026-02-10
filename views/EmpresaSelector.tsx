@@ -46,7 +46,7 @@ const EmpresaSelector: React.FC<EmpresaSelectorProps> = ({ onSelectEmpresa, onBa
             <div className="bg-gradient-to-br from-white to-pink-50 rounded-[2.3rem] p-6 flex flex-col items-center gap-4">
               <div className="h-16 lg:h-20 flex items-center justify-center">
                 <img 
-                  src="public/img/logo_natura.png" 
+                  src="/img/logo_natura.png" 
                   alt="Natura" 
                   className="h-full object-contain"
                 />
@@ -62,7 +62,7 @@ const EmpresaSelector: React.FC<EmpresaSelectorProps> = ({ onSelectEmpresa, onBa
             <div className="bg-gradient-to-br from-white to-blue-50 rounded-[2.3rem] p-6 flex flex-col items-center gap-4">
               <div className="h-16 lg:h-20 flex items-center justify-center">
                 <img 
-                  src="public/img/logo_esika.png" 
+                  src="/img/logo_esika.png" 
                   alt="Ésika" 
                   className="h-full object-contain"
                 />
