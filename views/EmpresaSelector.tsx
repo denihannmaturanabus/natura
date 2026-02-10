@@ -1,12 +1,21 @@
 import React from 'react';
+import { ChevronLeft } from 'lucide-react';
 
 interface EmpresaSelectorProps {
   onSelectEmpresa: (empresa: 'natura' | 'esika') => void;
+  onBack: () => void;
 }
 
-const EmpresaSelector: React.FC<EmpresaSelectorProps> = ({ onSelectEmpresa }) => {
+const EmpresaSelector: React.FC<EmpresaSelectorProps> = ({ onSelectEmpresa, onBack }) => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-gray-50 to-gray-100 relative">
+      {/* Botón Volver */}
+      <button
+        onClick={onBack}
+        className="absolute top-6 left-6 p-3 bg-white hover:bg-gray-100 rounded-2xl shadow-lg transition-all active:scale-95"
+      >
+        <ChevronLeft size={24} className="text-gray-700" />
+      </button>
       <div className="w-full max-w-sm lg:max-w-md space-y-8 animate-in fade-in zoom-in duration-500">
         <div className="text-center space-y-3">
           <div className="inline-flex items-center justify-center w-24 h-24 lg:w-28 lg:h-28 bg-white rounded-3xl shadow-xl mb-4 ring-1 ring-gray-200">

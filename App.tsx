@@ -51,8 +51,16 @@ const App: React.FC = () => {
     return <Login onLogin={handleLogin} />;
   }
 
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setSelectedEmpresa(null);
+    setView('login');
+    sessionStorage.removeItem('gm_auth');
+    sessionStorage.removeItem('gm_empresa');
+  };
+
   if (!selectedEmpresa) {
-    return <EmpresaSelector onSelectEmpresa={handleSelectEmpresa} />;
+    return <EmpresaSelector onSelectEmpresa={handleSelectEmpresa} onBack={handleLogout} />;
   }
 
   return (
