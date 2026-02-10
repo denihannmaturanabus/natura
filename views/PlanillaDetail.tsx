@@ -6,11 +6,12 @@ import { Planilla, Pedido, Producto } from '../types';
 import { db } from '../services/supabase';
 
 interface PlanillaDetailProps {
+  empresa: 'natura' | 'esika';
   planillaId: string;
   onBack: () => void;
 }
 
-const PlanillaDetail: React.FC<PlanillaDetailProps> = ({ planillaId, onBack }) => {
+const PlanillaDetail: React.FC<PlanillaDetailProps> = ({ empresa, planillaId, onBack }) => {
   const [planilla, setPlanilla] = useState<Planilla | null>(null);
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const [originalPedidos, setOriginalPedidos] = useState<Pedido[]>([]);
@@ -182,6 +183,7 @@ const PlanillaDetail: React.FC<PlanillaDetailProps> = ({ planillaId, onBack }) =
 
   return (
     <Layout 
+      empresa={empresa}
       showBack 
       onBack={handleBack} 
       title={planilla?.nombre || 'Detalle'}

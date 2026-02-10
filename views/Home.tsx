@@ -1,16 +1,18 @@
 
 import React, { useEffect, useState } from 'react';
-import { Plus, ChevronRight, BarChart3, Trash2 } from 'lucide-react';
+import { Plus, ChevronRight, BarChart3, Trash2, Building2 } from 'lucide-react';
 import Layout from '../components/Layout';
 import { Planilla } from '../types';
 import { db } from '../services/supabase';
 
 interface HomeProps {
+  empresa: 'natura' | 'esika';
   onSelectPlanilla: (id: string) => void;
   onGoStats: () => void;
+  onChangeEmpresa: () => void;
 }
 
-const Home: React.FC<HomeProps> = ({ onSelectPlanilla, onGoStats }) => {
+const Home: React.FC<HomeProps> = ({ empresa, onSelectPlanilla, onGoStats, onChangeEmpresa }) => {
   const [planillas, setPlanillas] = useState<Planilla[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -18,26 +20,30 @@ const Home: React.FC<HomeProps> = ({ onSelectPlanilla, onGoStats }) => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [empresa]); // Reload when empresa changes
 
   const loadData = async () => {
-    const data = await db.getPlanillas();
-    setPlanillas(data);
+    const allPlanillas = await db.getPlanillas();
+    // Filtrar solo las planillas de la empresa seleccionada
+    const filtered = allPlanillas.filter(p => p.empresa === empresa);
+    setPlanillas(filtered);
     setLoading(false);
   };
 
   const createPlanilla = async (clone: boolean) => {
+    const empresaCapitalized = empresa.charAt(0).toUpperCase() + empresa.slice(1);
     const newPlanilla: Planilla = {
       id: crypto.randomUUID(),
-      nombre: newName || `Ciclo ${new Date().toLocaleDateString('es-ES', { month: 'long' })}`,
+      nombre: newName || `Ciclo ${new Date().toLocaleDateString('es-ES', { month: 'long' })} - ${empresaCapitalized}`,
       comision_porcentaje: 30,
+      empresa: empresa, // Asignar empresa activa
       created_at: new Date().toISOString(),
     };
 
     await db.savePlanilla(newPlanilla);
 
     if (clone && planillas.length > 0) {
-      const lastPlanilla = planillas[0];
+      const lastPlanilla = planillas[0]; // Ya filtrada por empresa
       const oldPedidos = await db.getPedidos(lastPlanilla.id);
       for (const p of oldPedidos) {
         await db.savePedido({
@@ -64,14 +70,24 @@ const Home: React.FC<HomeProps> = ({ onSelectPlanilla, onGoStats }) => {
 
   return (
     <Layout 
+      empresa={empresa}
       title="Mis Ciclos"
       headerAction={
-        <button 
-          onClick={onGoStats}
-          className="p-2.5 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all shadow-md"
-        >
-          <BarChart3 size={24} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={onChangeEmpresa}
+            className="p-2.5 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all shadow-md"
+            title="Cambiar empresa"
+          >
+            <Building2 size={24} />
+          </button>
+          <button 
+            onClick={onGoStats}
+            className="p-2.5 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all shadow-md"
+          >
+            <BarChart3 size={24} />
+          </button>
+        </div>
       }
     >
       <div className="space-y-4 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 pb-24">
@@ -131,7 +147,7 @@ const Home: React.FC<HomeProps> = ({ onSelectPlanilla, onGoStats }) => {
             
             <input
               type="text"
-              placeholder="Ej: Ciclo Marzo - Natura"
+              placeholder={`Ej: Ciclo Marzo - ${empresa.charAt(0).toUpperCase() + empresa.slice(1)}`}
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               className="w-full h-14 px-5 bg-white border-2 border-pink-200 rounded-2xl focus:ring-4 focus:ring-pink-200 focus:border-pink-400 outline-none text-lg"

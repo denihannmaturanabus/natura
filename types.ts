@@ -3,6 +3,7 @@ export interface Planilla {
   id: string;
   nombre: string;
   comision_porcentaje: number;
+  empresa: 'natura' | 'esika';
   created_at: string;
 }
 

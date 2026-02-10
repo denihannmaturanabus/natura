@@ -6,15 +6,17 @@ import { db } from '../services/supabase';
 import { Planilla, Pedido } from '../types';
 
 interface StatsProps {
+  empresa: 'natura' | 'esika';
   onBack: () => void;
 }
 
-const Stats: React.FC<StatsProps> = ({ onBack }) => {
+const Stats: React.FC<StatsProps> = ({ empresa, onBack }) => {
   const [data, setData] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const planillas = await db.getPlanillas();
+      const allPlanillas = await db.getPlanillas();
+      const planillas = allPlanillas.filter(p => p.empresa === empresa);
       const chartData = await Promise.all(planillas.map(async (p) => {
         const pedidos = await db.getPedidos(p.id);
         const total = pedidos.reduce((acc, curr) => {
@@ -36,7 +38,7 @@ const Stats: React.FC<StatsProps> = ({ onBack }) => {
   const totalAcumulado = data.reduce((acc, curr) => acc + curr.ganancia, 0);
 
   return (
-    <Layout showBack onBack={onBack} title="Estadísticas">
+    <Layout empresa={empresa} showBack onBack={onBack} title="Estadísticas">
       <div className="space-y-6">
         <div className="bg-gradient-to-br from-pink-500 to-rose-400 rounded-[2.5rem] p-8 text-white shadow-xl shadow-pink-200">
           <p className="text-pink-100 font-bold text-sm uppercase tracking-widest mb-2">Ganancia Total 2024</p>

@@ -4,16 +4,26 @@ import React from 'react';
 interface LayoutProps {
   children: React.ReactNode;
   title?: string;
+  empresa?: 'natura' | 'esika';
   headerAction?: React.ReactNode;
   showBack?: boolean;
   onBack?: () => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, title, headerAction, showBack, onBack }) => {
+const Layout: React.FC<LayoutProps> = ({ children, title, empresa = 'natura', headerAction, showBack, onBack }) => {
+  // Definir el gradiente según la empresa
+  const headerGradient = empresa === 'natura' 
+    ? 'bg-gradient-to-r from-pink-500 via-pink-400 to-rose-500' 
+    : 'bg-gradient-to-r from-cyan-500 via-blue-500 to-blue-600';
+  
+  const shadowColor = empresa === 'natura'
+    ? 'shadow-pink-200/50'
+    : 'shadow-blue-200/50';
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 pb-10">
-      {/* Navbar Rosada con Gradiente */}
-      <header className="sticky top-0 z-50 bg-gradient-to-r from-pink-500 via-pink-400 to-rose-500 shadow-lg shadow-pink-200/50">
+      {/* Navbar con color dinámico según empresa */}
+      <header className={`sticky top-0 z-50 ${headerGradient} shadow-lg ${shadowColor}`}>
         <div className="flex items-center justify-between px-6 lg:px-8 py-4 lg:py-5 max-w-7xl lg:mx-auto">
           <div className="flex items-center gap-3">
             {showBack && (
