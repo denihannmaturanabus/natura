@@ -33,19 +33,17 @@ const EmpresaSelector: React.FC<EmpresaSelectorProps> = ({ onSelectEmpresa, onBa
           {/* Botón Natura */}
           <button
             onClick={() => onSelectEmpresa('natura')}
-            className="w-full h-20 lg:h-24 bg-gradient-to-br from-pink-400 via-pink-500 to-rose-500 hover:from-pink-500 hover:via-pink-600 hover:to-rose-600 active:scale-[0.98] text-white rounded-3xl font-bold text-xl lg:text-2xl shadow-2xl shadow-pink-300/50 transition-all flex items-center justify-center gap-4 border-2 border-pink-300/30"
+            className="w-full h-24 lg:h-28 bg-gradient-to-br from-pink-400 via-pink-500 to-rose-500 hover:from-pink-500 hover:via-pink-600 hover:to-rose-600 active:scale-[0.98] text-white rounded-3xl font-bold text-xl lg:text-2xl shadow-2xl shadow-pink-300/50 transition-all flex items-center justify-center gap-4 border-2 border-pink-300/30 p-4"
           >
-            <span className="text-3xl lg:text-4xl">🌸</span>
-            <span>Natura</span>
+            <img src="/img/logo_natura.png" alt="Natura" className="h-12 lg:h-16 object-contain" />
           </button>
 
           {/* Botón Ésika */}
           <button
             onClick={() => onSelectEmpresa('esika')}
-            className="w-full h-20 lg:h-24 bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-600 hover:from-cyan-500 hover:via-blue-600 hover:to-blue-700 active:scale-[0.98] text-white rounded-3xl font-bold text-xl lg:text-2xl shadow-2xl shadow-blue-300/50 transition-all flex items-center justify-center gap-4 border-2 border-blue-300/30"
+            className="w-full h-24 lg:h-28 bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-600 hover:from-cyan-500 hover:via-blue-600 hover:to-blue-700 active:scale-[0.98] text-white rounded-3xl font-bold text-xl lg:text-2xl shadow-2xl shadow-blue-300/50 transition-all flex items-center justify-center gap-4 border-2 border-blue-300/30 p-4"
           >
-            <span className="text-3xl lg:text-4xl">💎</span>
-            <span>Ésika</span>
+            <img src="/img/logo_esika.webp" alt="Ésika" className="h-12 lg:h-16 object-contain" />
           </button>
         </div>
 
