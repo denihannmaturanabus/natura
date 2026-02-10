@@ -25,8 +25,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-pink-50 to-pink-100">
       <div className="w-full max-w-sm lg:max-w-md space-y-8 animate-in fade-in zoom-in duration-500">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-20 h-20 lg:w-24 lg:h-24 bg-white rounded-3xl shadow-xl shadow-pink-200/50 mb-4 ring-1 ring-pink-100">
-            <span className="text-4xl lg:text-5xl">✨</span>
+          <div className="inline-flex items-center justify-center w-64 h-64 lg:w-80 lg:h-80 rounded-3xl mb-4">
+            <img src="/img/rene.png" alt="Rene" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-3xl lg:text-4xl font-extrabold text-gray-800 tracking-tight">Hola Maria!</h1>
           <p className="text-gray-500 font-medium lg:text-lg">Estoy aqui para ayudarte con tus cuentas </p>
@@ -39,7 +39,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Contraseña"
-              className="w-full h-16 lg:h-20 px-6 pt-2 bg-white/80 border border-pink-100 rounded-2xl shadow-sm focus:ring-4 focus:ring-pink-200/50 focus:border-pink-300 outline-none text-center text-2xl lg:text-3xl tracking-[1em] transition-all"
+              className="w-full h-16 lg:h-20 px-6 pt-2 bg-white/80 border border-pink-100 rounded-2xl shadow-sm focus:ring-4 focus:ring-pink-200/50 focus:border-pink-300 outline-none text-center text-lg lg:text-xl tracking-[1em] transition-all"
               autoFocus
             />
             {error && <p className="text-center text-red-500 mt-2 font-medium">Intenta de nuevo</p>}
