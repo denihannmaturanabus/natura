@@ -286,9 +286,10 @@ const PlanillaDetail: React.FC<PlanillaDetailProps> = ({ empresa, planillaId, on
                           <span className="text-gray-400 text-xs font-bold">$</span>
                           <input
                             type="number"
+                            step="1"
                             value={prod.monto || ''}
                             placeholder="0"
-                            onChange={(e) => updateProducto(p.id, prod.id, { monto: parseFloat(e.target.value) || 0 })}
+                            onChange={(e) => updateProducto(p.id, prod.id, { monto: parseInt(e.target.value) || 0 })}
                             className={`w-16 text-sm font-bold outline-none bg-transparent text-right ${prod.pagado ? 'text-green-600' : 'text-gray-800'}`}
                           />
                         </div>
