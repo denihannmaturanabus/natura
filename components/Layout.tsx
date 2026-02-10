@@ -25,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, headerAction, showBack
               </button>
             )}
             <h1 className="text-xl lg:text-2xl font-bold text-white tracking-tight drop-shadow-md">
-              {title || 'GlowManager'}
+              {title || 'Cuentas Claras Mamá'}
             </h1>
           </div>
           <div>{headerAction}</div>

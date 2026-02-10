@@ -1,5 +1,5 @@
 {
-  "name": "GlowManager - Gestión de Ventas",
+  "name": "Cuentas Claras Mamá - Gestión de Ventas",
   "description": "Aplicación minimalista estilo iOS para la gestión de ventas de cosméticos (Natura/Esika) con autoguardado y seguimiento de deudas.",
   "requestFramePermissions": [
     "camera"

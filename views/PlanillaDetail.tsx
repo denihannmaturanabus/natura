@@ -176,7 +176,7 @@ const PlanillaDetail: React.FC<PlanillaDetailProps> = ({ planillaId, onBack }) =
   const handleWhatsApp = (pedido: Pedido) => {
     const pendiente = pedido.productos.filter(p => !p.pagado).reduce((sum, prod) => sum + prod.monto, 0);
     if (pendiente === 0 || pedido.productos.length === 0) return;
-    const message = encodeURIComponent(`¡Hola ${pedido.cliente_nombre}! Te escribo de GlowManager ✨ Te comento que tienes un saldo pendiente de $${pendiente.toLocaleString()} de tu pedido de cosméticos. ¿Podrás realizar el pago hoy? 🌸`);
+    const message = encodeURIComponent(`¡Hola ${pedido.cliente_nombre}! Te escribo de Cuentas Claras Mamá ✨ Te comento que tienes un saldo pendiente de $${pendiente.toLocaleString()} de tu pedido de cosméticos. ¿Podrás realizar el pago hoy? 🌸`);
     window.open(`https://wa.me/?text=${message}`, '_blank');
   };
 
