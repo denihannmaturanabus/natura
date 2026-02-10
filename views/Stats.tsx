@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import Layout from '../components/Layout';
-import { db } from '../services/supabaseMock';
+import { db } from '../services/supabase';
 import { Planilla, Pedido } from '../types';
 
 interface StatsProps {
@@ -17,7 +17,10 @@ const Stats: React.FC<StatsProps> = ({ onBack }) => {
       const planillas = await db.getPlanillas();
       const chartData = await Promise.all(planillas.map(async (p) => {
         const pedidos = await db.getPedidos(p.id);
-        const total = pedidos.reduce((acc, curr) => acc + curr.monto_deuda, 0);
+        const total = pedidos.reduce((acc, curr) => {
+          const totalPedido = curr.productos.reduce((sum, prod) => sum + (prod.monto || 0), 0);
+          return acc + totalPedido;
+        }, 0);
         const profit = (total * p.comision_porcentaje) / 100;
         return {
           name: p.nombre.split(' ')[1] || p.nombre.substring(0, 5),

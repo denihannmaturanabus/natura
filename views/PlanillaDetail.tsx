@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Send, Share2, Plus, UserPlus, Trash2, ShoppingBag, Save, X } from 'lucide-react';
 import Layout from '../components/Layout';
 import { Planilla, Pedido, Producto } from '../types';
-import { db } from '../services/supabaseMock';
+import { db } from '../services/supabase';
 
 interface PlanillaDetailProps {
   planillaId: string;

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Plus, ChevronRight, BarChart3, Trash2 } from 'lucide-react';
 import Layout from '../components/Layout';
 import { Planilla } from '../types';
-import { db } from '../services/supabaseMock';
+import { db } from '../services/supabase';
 
 interface HomeProps {
   onSelectPlanilla: (id: string) => void;

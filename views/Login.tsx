@@ -28,8 +28,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           <div className="inline-flex items-center justify-center w-20 h-20 lg:w-24 lg:h-24 bg-white rounded-3xl shadow-xl shadow-pink-200/50 mb-4 ring-1 ring-pink-100">
             <span className="text-4xl lg:text-5xl">✨</span>
           </div>
-          <h1 className="text-3xl lg:text-4xl font-extrabold text-gray-800 tracking-tight">GlowManager</h1>
-          <p className="text-gray-500 font-medium lg:text-lg">Gestión de Ventas Elegante</p>
+          <h1 className="text-3xl lg:text-4xl font-extrabold text-gray-800 tracking-tight">Hola Maria!</h1>
+          <p className="text-gray-500 font-medium lg:text-lg">Estoy aqui para ayudarte con tus cuentas </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
