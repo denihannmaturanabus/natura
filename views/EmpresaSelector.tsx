@@ -43,7 +43,7 @@ const EmpresaSelector: React.FC<EmpresaSelectorProps> = ({ onSelectEmpresa, onBa
             onClick={() => onSelectEmpresa('esika')}
             className="w-full h-24 lg:h-28 bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-600 hover:from-cyan-500 hover:via-blue-600 hover:to-blue-700 active:scale-[0.98] text-white rounded-3xl font-bold text-xl lg:text-2xl shadow-2xl shadow-blue-300/50 transition-all flex items-center justify-center gap-4 border-2 border-blue-300/30 p-4"
           >
-            <img src="/img/logo_esika.webp" alt="Ésika" className="h-12 lg:h-16 object-contain" />
+            <img src="/img/logo_esika.png" alt="Ésika" className="h-12 lg:h-16 object-contain" />
           </button>
         </div>
 

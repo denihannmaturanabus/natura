@@ -31,33 +31,38 @@ const Home: React.FC<HomeProps> = ({ empresa, onSelectPlanilla, onGoStats, onCha
   };
 
   const createPlanilla = async (clone: boolean) => {
-    const empresaCapitalized = empresa.charAt(0).toUpperCase() + empresa.slice(1);
-    const newPlanilla: Planilla = {
-      id: crypto.randomUUID(),
-      nombre: newName || `Ciclo ${new Date().toLocaleDateString('es-ES', { month: 'long' })} - ${empresaCapitalized}`,
-      comision_porcentaje: 30,
-      empresa: empresa, // Asignar empresa activa
-      created_at: new Date().toISOString(),
-    };
+    try {
+      const empresaCapitalized = empresa.charAt(0).toUpperCase() + empresa.slice(1);
+      const newPlanilla: Planilla = {
+        id: crypto.randomUUID(),
+        nombre: newName || `Ciclo ${new Date().toLocaleDateString('es-ES', { month: 'long' })} - ${empresaCapitalized}`,
+        comision_porcentaje: 30,
+        empresa: empresa, // Asignar empresa activa
+        created_at: new Date().toISOString(),
+      };
 
-    await db.savePlanilla(newPlanilla);
+      await db.savePlanilla(newPlanilla);
 
-    if (clone && planillas.length > 0) {
-      const lastPlanilla = planillas[0]; // Ya filtrada por empresa
-      const oldPedidos = await db.getPedidos(lastPlanilla.id);
-      for (const p of oldPedidos) {
-        await db.savePedido({
-          ...p,
-          id: crypto.randomUUID(),
-          planilla_id: newPlanilla.id,
-          productos: p.productos.map(prod => ({ ...prod, id: crypto.randomUUID(), pagado: false })) // Reset payment status for all products
-        });
+      if (clone && planillas.length > 0) {
+        const lastPlanilla = planillas[0]; // Ya filtrada por empresa
+        const oldPedidos = await db.getPedidos(lastPlanilla.id);
+        for (const p of oldPedidos) {
+          await db.savePedido({
+            ...p,
+            id: crypto.randomUUID(),
+            planilla_id: newPlanilla.id,
+            productos: p.productos.map(prod => ({ ...prod, id: crypto.randomUUID(), pagado: false })) // Reset payment status for all products
+          });
+        }
       }
-    }
 
-    setShowModal(false);
-    setNewName('');
-    onSelectPlanilla(newPlanilla.id);
+      setShowModal(false);
+      setNewName('');
+      onSelectPlanilla(newPlanilla.id);
+    } catch (error) {
+      console.error('Error al crear planilla:', error);
+      alert('Error al crear la planilla. Asegúrate de haber ejecutado el script SQL db_add_empresa.sql en Supabase para añadir la columna "empresa" a la tabla planillas.');
+    }
   };
 
   const handleDelete = async (e: React.MouseEvent, id: string) => {
