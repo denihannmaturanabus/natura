@@ -17,6 +17,10 @@ const Home: React.FC<HomeProps> = ({ empresa, onSelectPlanilla, onGoStats, onCha
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [newName, setNewName] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -65,11 +69,27 @@ const Home: React.FC<HomeProps> = ({ empresa, onSelectPlanilla, onGoStats, onCha
     }
   };
 
-  const handleDelete = async (e: React.MouseEvent, id: string) => {
+  const handleDelete = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    if (confirm('¿Eliminar esta planilla y todos sus registros?')) {
-      await db.deletePlanilla(id);
-      loadData();
+    setDeleteTarget(id);
+    setShowDeleteModal(true);
+    setDeletePassword('');
+    setDeleteError(false);
+  };
+
+  const confirmDelete = async () => {
+    const appPassword = import.meta.env.VITE_APP_PASSWORD || '1234';
+    if (deletePassword === appPassword) {
+      if (deleteTarget) {
+        await db.deletePlanilla(deleteTarget);
+        loadData();
+      }
+      setShowDeleteModal(false);
+      setDeleteTarget(null);
+      setDeletePassword('');
+    } else {
+      setDeleteError(true);
+      setTimeout(() => setDeleteError(false), 500);
     }
   };
 
@@ -176,6 +196,51 @@ const Home: React.FC<HomeProps> = ({ empresa, onSelectPlanilla, onGoStats, onCha
                 className="h-14 text-gray-500 hover:bg-gray-100 font-medium rounded-2xl transition-all"
               >
                 Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in slide-in-from-bottom duration-300">
+          <div className="bg-gradient-to-br from-white to-red-50 w-full max-w-md rounded-[2.5rem] p-8 space-y-6 shadow-2xl border-2 border-red-200">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-extrabold text-gray-800">⚠️ Eliminar Planilla</h2>
+              <p className="text-red-500 font-semibold">Esta acción eliminará todos los clientes y productos de esta planilla.</p>
+            </div>
+            
+            <div className={`transition-transform ${deleteError ? 'animate-bounce' : ''}`}>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Ingresa tu contraseña para confirmar:</label>
+              <input
+                type="password"
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && confirmDelete()}
+                placeholder="Contraseña"
+                className="w-full h-14 px-5 bg-white border-2 border-red-200 rounded-2xl focus:ring-4 focus:ring-red-200 focus:border-red-400 outline-none text-lg text-center tracking-[0.5em]"
+                autoFocus
+              />
+              {deleteError && <p className="text-center text-red-500 mt-2 font-medium">Contraseña incorrecta</p>}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setDeleteTarget(null);
+                  setDeletePassword('');
+                }}
+                className="h-14 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl transition-all"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="h-14 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold rounded-2xl shadow-lg transition-all"
+              >
+                Eliminar
               </button>
             </div>
           </div>
