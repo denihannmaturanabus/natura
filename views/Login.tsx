@@ -54,7 +54,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </form>
 
         <p className="text-center text-gray-400 text-sm lg:text-base">
-          Optimizado para iPhone y Desktop
+          Creado con ❤️ por tu hijo
         </p>
       </div>
     </div>
