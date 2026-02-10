@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { Send, Share2, Plus, UserPlus, Trash2, ShoppingBag, Save, X } from 'lucide-react';
+import { Send, Share2, Plus, UserPlus, Trash2, Save, X } from 'lucide-react';
 import Layout from '../components/Layout';
 import { Planilla, Pedido, Producto } from '../types';
 import { db } from '../services/supabase';
@@ -172,13 +172,6 @@ const PlanillaDetail: React.FC<PlanillaDetailProps> = ({ empresa, planillaId, on
     } else {
       onBack();
     }
-  };
-
-  const handleWhatsApp = (pedido: Pedido) => {
-    const pendiente = pedido.productos.filter(p => !p.pagado).reduce((sum, prod) => sum + prod.monto, 0);
-    if (pendiente === 0 || pedido.productos.length === 0) return;
-    const message = encodeURIComponent(`¡Hola ${pedido.cliente_nombre}! Te escribo de Cuentas Claras Mamá ✨ Te comento que tienes un saldo pendiente de $${pendiente.toLocaleString()} de tu pedido de cosméticos. ¿Podrás realizar el pago hoy? 🌸`);
-    window.open(`https://wa.me/?text=${message}`, '_blank');
   };
 
   const generateWhatsAppTicket = (pedido: Pedido, empresa: 'natura' | 'esika') => {
@@ -373,22 +366,12 @@ const PlanillaDetail: React.FC<PlanillaDetailProps> = ({ empresa, planillaId, on
                 </div>
 
                 <div className="flex flex-col items-center gap-2 flex-shrink-0">
-                  {/* Botón de Ticket Completo */}
+                  {/* Botón de Ticket WhatsApp */}
                   {p.productos.length > 0 && (
                     <button 
                       onClick={() => generateWhatsAppTicket(p, empresa)}
-                      className="w-9 h-9 sm:w-11 sm:h-11 bg-blue-500 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center active:scale-90 transition-all shadow-md"
-                      title="Enviar ticket detallado"
-                    >
-                      <ShoppingBag size={16} className="sm:w-[18px] sm:h-[18px]" />
-                    </button>
-                  )}
-                  {/* Botón de Recordatorio Rápido */}
-                  {totalPendiente > 0 && (
-                    <button 
-                      onClick={() => handleWhatsApp(p)}
                       className="w-9 h-9 sm:w-11 sm:h-11 bg-green-500 hover:bg-green-600 text-white rounded-2xl flex items-center justify-center active:scale-90 transition-all shadow-md"
-                      title="Enviar recordatorio de pago"
+                      title="Enviar ticket por WhatsApp"
                     >
                       <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
                     </button>
