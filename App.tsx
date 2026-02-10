@@ -47,6 +47,12 @@ const App: React.FC = () => {
     setView('detail');
   };
 
+  const handleChangeEmpresa = () => {
+    setSelectedEmpresa(null);
+    sessionStorage.removeItem('gm_empresa');
+    setView('empresaSelector');
+  };
+
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;
   }
@@ -71,7 +77,7 @@ const App: React.FC = () => {
             empresa={selectedEmpresa}
             onSelectPlanilla={navigateToPlanilla} 
             onGoStats={() => setView('stats')}
-            onChangeEmpresa={() => setView('empresaSelector')}
+            onChangeEmpresa={handleChangeEmpresa}
           />
         )}
         
