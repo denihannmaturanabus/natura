@@ -9,6 +9,9 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+  const [showMamiInput, setShowMamiInput] = useState(false);
+  const [mamiPassword, setMamiPassword] = useState('');
+  const [mamiError, setMamiError] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +24,21 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     }
   };
 
-  const handleReadOnlyLogin = () => {
-    onLogin('readonly', true);
+  const handleMamiClick = () => {
+    setShowMamiInput(true);
+    setMamiPassword('');
+    setMamiError(false);
+  };
+
+  const handleMamiSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const readOnlyPassword = import.meta.env.VITE_READONLY_PASSWORD || '240103';
+    if (mamiPassword === readOnlyPassword) {
+      onLogin('readonly', true);
+    } else {
+      setMamiError(true);
+      setTimeout(() => setMamiError(false), 500);
+    }
   };
 
   return (
@@ -58,13 +74,44 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </form>
 
         <div className="pt-4 border-t border-gray-200">
-          <button
-            onClick={handleReadOnlyLogin}
-            className="w-full h-16 lg:h-20 bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 active:scale-[0.98] text-white rounded-2xl font-bold text-lg lg:text-xl shadow-lg shadow-purple-200 transition-all flex items-center justify-center gap-2"
-          >
-            <Eye size={24} />
-            Entrar modo Mami 👵
-          </button>
+          {!showMamiInput ? (
+            <button
+              onClick={handleMamiClick}
+              className="w-full h-16 lg:h-20 bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 active:scale-[0.98] text-white rounded-2xl font-bold text-lg lg:text-xl shadow-lg shadow-purple-200 transition-all flex items-center justify-center gap-2"
+            >
+              <Eye size={24} />
+              Entrar modo Mami 👵
+            </button>
+          ) : (
+            <form onSubmit={handleMamiSubmit} className="space-y-4">
+              <div className={`relative transition-transform ${mamiError ? 'animate-bounce' : ''}`}>
+                <input
+                  type="password"
+                  value={mamiPassword}
+                  onChange={(e) => setMamiPassword(e.target.value)}
+                  placeholder="Contraseña Mami"
+                  className="w-full h-16 lg:h-20 px-6 pt-2 bg-white/80 border border-purple-200 rounded-2xl shadow-sm focus:ring-4 focus:ring-purple-200/50 focus:border-purple-300 outline-none text-center text-lg lg:text-xl tracking-[1em] transition-all"
+                  autoFocus
+                />
+                {mamiError && <p className="text-center text-red-500 mt-2 font-medium">Contraseña incorrecta</p>}
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowMamiInput(false)}
+                  className="flex-1 h-14 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-2xl font-bold text-base transition-all"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 h-14 bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white rounded-2xl font-bold text-base shadow-lg shadow-purple-200 transition-all"
+                >
+                  Entrar 👵
+                </button>
+              </div>
+            </form>
+          )}
         </div>
 
         <p className="text-center text-gray-400 text-sm lg:text-base">
