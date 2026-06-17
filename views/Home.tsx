@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Plus, ChevronRight, BarChart3, Trash2, Building2 } from 'lucide-react';
+import { Plus, ChevronRight, BarChart3, Trash2, Building2, AlertTriangle } from 'lucide-react';
 import Layout from '../components/Layout';
 import { Planilla } from '../types';
 import { db } from '../services/supabase';
@@ -19,7 +19,7 @@ const Home: React.FC<HomeProps> = ({ empresa, isReadOnly = false, onSelectPlanil
   const [showModal, setShowModal] = useState(false);
   const [newName, setNewName] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState(false);
 
@@ -74,20 +74,21 @@ const Home: React.FC<HomeProps> = ({ empresa, isReadOnly = false, onSelectPlanil
     e.stopPropagation();
     setDeleteTarget(id);
     setShowDeleteModal(true);
-    setDeletePassword('');
+    setDeleteConfirmText('');
     setDeleteError(false);
   };
 
   const confirmDelete = async () => {
-    const appPassword = import.meta.env.VITE_APP_PASSWORD || '1234';
-    if (deletePassword === appPassword) {
+    const confirmWord = deleteConfirmText.trim().toLowerCase();
+
+    if (confirmWord === 'eliminar') {
       if (deleteTarget) {
         await db.deletePlanilla(deleteTarget);
         loadData();
       }
       setShowDeleteModal(false);
       setDeleteTarget(null);
-      setDeletePassword('');
+      setDeleteConfirmText('');
     } else {
       setDeleteError(true);
       setTimeout(() => setDeleteError(false), 500);
@@ -213,22 +214,28 @@ const Home: React.FC<HomeProps> = ({ empresa, isReadOnly = false, onSelectPlanil
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in slide-in-from-bottom duration-300">
           <div className="bg-gradient-to-br from-white to-red-50 w-full max-w-md rounded-[2.5rem] p-8 space-y-6 shadow-2xl border-2 border-red-200">
             <div className="space-y-2">
-              <h2 className="text-2xl font-extrabold text-gray-800">⚠️ Eliminar Planilla</h2>
+              <div className="flex items-center gap-3 text-red-600">
+                <div className="w-11 h-11 rounded-2xl bg-red-100 flex items-center justify-center">
+                  <AlertTriangle size={24} />
+                </div>
+                <h2 className="text-2xl font-extrabold text-gray-800">Eliminar Planilla</h2>
+              </div>
               <p className="text-red-500 font-semibold">Esta acción eliminará todos los clientes y productos de esta planilla.</p>
+              <p className="text-sm text-gray-600 font-medium">Para confirmar, escribí la palabra <span className="font-extrabold text-red-600">eliminar</span>.</p>
             </div>
             
             <div className={`transition-transform ${deleteError ? 'animate-bounce' : ''}`}>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Ingresa tu contraseña para confirmar:</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Escribí eliminar para confirmar:</label>
               <input
-                type="password"
-                value={deletePassword}
-                onChange={(e) => setDeletePassword(e.target.value)}
+                type="text"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && confirmDelete()}
-                placeholder="Contraseña"
-                className="w-full h-14 px-5 bg-white border-2 border-red-200 rounded-2xl focus:ring-4 focus:ring-red-200 focus:border-red-400 outline-none text-lg text-center tracking-[0.5em]"
+                placeholder="eliminar"
+                className="w-full h-14 px-5 bg-white border-2 border-red-200 rounded-2xl focus:ring-4 focus:ring-red-200 focus:border-red-400 outline-none text-lg text-center"
                 autoFocus
               />
-              {deleteError && <p className="text-center text-red-500 mt-2 font-medium">Contraseña incorrecta</p>}
+              {deleteError && <p className="text-center text-red-500 mt-2 font-medium">Tenés que escribir eliminar para continuar</p>}
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-2">
@@ -236,7 +243,7 @@ const Home: React.FC<HomeProps> = ({ empresa, isReadOnly = false, onSelectPlanil
                 onClick={() => {
                   setShowDeleteModal(false);
                   setDeleteTarget(null);
-                  setDeletePassword('');
+                  setDeleteConfirmText('');
                 }}
                 className="h-14 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl transition-all"
               >
