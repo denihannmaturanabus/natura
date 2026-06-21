@@ -144,7 +144,8 @@ export const db = {
       if (productos && productos.length > 0) {
         const productosConPedidoId = productos.map(p => ({
           ...p,
-          pedido_id: pedido.id
+          pedido_id: pedido.id,
+          created_at: p.created_at || new Date().toISOString()
         }));
         
         const { error: productosError } = await supabase

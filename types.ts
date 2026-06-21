@@ -12,6 +12,7 @@ export interface Producto {
   descripcion: string;
   monto: number;
   pagado: boolean;
+  created_at?: string;
 }
 
 export interface Pedido {
